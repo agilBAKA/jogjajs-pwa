@@ -1,0 +1,122 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+*:focus {
+    outline: none;
+}
+
+body {
+    font-family: 'Karla', sans-serif;
+    padding-top: 50px;
+    font-size: 15px;
+    line-height: 25px;
+}
+
+/* header */
+header {
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 15px;
+    line-height: 24px;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+}
+
+header.header--light {
+    background-color: #fff; 
+    border-bottom: 1px solid #ddd;
+    color: #ed3237;
+}
+
+header.header--dark {
+    background-color: #ed3237;
+    color: #fff;
+}
+
+header.header--dark  a {
+    color: #fff;
+}
+
+header.header--dark svg {
+    fill: #fff;
+}
+
+header h1 {
+    font-size: 1.3em;
+    font-weight: 400;
+}
+
+header a {
+    outline: none;
+    background: transparent;
+    border: none;
+}
+
+main#main-content {
+    padding: 15px;
+    min-height: 80vh;
+}
+
+ 
+.card {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    width: 100%;
+    background: #ffff;
+    padding: 15px;
+    border-radius: 4px;
+    margin: 15px 0px;
+    color: #2f3346; 
+}
+.card.card--list {
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+    -webkit-box-shadow: 0px 5px 38px 0px rgba(192, 195, 216, 0.4);
+    box-shadow: 0px 5px 38px 0px rgba(192, 195, 216, 0.4);
+    text-decoration: none
+}
+
+.card.card--list:focus {
+    background: #fafbff
+}
+
+.card.card--list .card__meta {
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    padding-right: 15px
+}
+
+.card.card--list .card__cover {
+    min-width: 70px;
+    min-height: 70px;
+    background: #e4e4e4
+}
+
+h2.heading {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -ms-flexbox;
+    display: flex;
+    display: -webkit-box;
+    font-size: 1.125em;
+    line-height: 24px;
+    max-height: 87px;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical
+}
+
+footer {
+    color: #2AF598;
+    padding: 15px;
+    font-size: 11px;
+}
