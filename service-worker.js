@@ -1,49 +1,43 @@
- 
+//This is the "Offline copy of pages" wervice worker
+
+//Install stage sets up the index page (home page) in the cahche and opens a new cache
 self.addEventListener('install', function(event) {
-  console.log('SW Installed!')
-
+  var indexPage = new Request('index.html');
   event.waitUntil(
-    caches.open('staticAssets')
-      .then(function(cache) {
-        return cache.addAll([
-          '/',
-          '/index.html',
-          '/dist/style.css',
-          '/dist/images/notif.svg',
-          '/app.js',
-          'https://fonts.googleapis.com/css?family=Karla:400,700'
-        ])
-      })
-  )
+    fetch(indexPage).then(function(response) {
+      return caches.open('pwabuilder-offline').then(function(cache) {
+        console.log('[PWA Builder] Cached index page during Install'+ response.url);
+        return cache.put(indexPage, response);
+      });
+  }));
 });
 
-self.addEventListener('activate', function() {
-  console.log('SW Activated!')
-});
+//If any fetch fails, it will look for the request in the cache and serve it from there first
+self.addEventListener('fetch', function(event) {
+  var updateCache = function(request){
+    return caches.open('pwabuilder-offline').then(function (cache) {
+      return fetch(request).then(function (response) {
+        console.log('[PWA Builder] add page to offline'+response.url)
+        return cache.put(request, response);
+      });
+    });
+  };
 
+  event.waitUntil(updateCache(event.request));
 
-addEventListener('fetch', function(event) {
   event.respondWith(
-    caches.match(event.request)
-      .then(function(response) {
-        if (response) {
-          return response;     // if valid response is found in cache return it
-        } else {
-          return fetch(event.request)     //fetch from internet
-            .then(function(res) {
-              return caches.open('staticAssets')
-                .then(function(cache) {
-                  cache.put(event.request.url, res.clone());    //save the response for future
-                  return res;   // return the fetched data
-                })
-            })
-            .catch(function(err) {       // fallback mechanism
-              return caches.open('staticAssets')
-                .then(function(cache) {
-                  return cache.match('/offline.html');
-                });
-            });
-        }
-      })
+    fetch(event.request).catch(function(error) {
+      console.log( '[PWA Builder] Network request Failed. Serving content from cache: ' + error );
+
+      //Check to see if you have it in the cache
+      //Return response
+      //If not in the cache, then return error page
+      return caches.open('pwabuilder-offline').then(function (cache) {
+        return cache.match(event.request).then(function (matching) {
+          var report =  !matching || matching.status == 404?Promise.reject('no-match'): matching;
+          return report
+        });
+      });
+    })
   );
-}); 
+})
